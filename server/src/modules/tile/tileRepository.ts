@@ -21,8 +21,24 @@ class TileRepository {
     return rows as Tile[];
   }
 
+  async update(tileToUpdate: Partial<Tile>) {
+    const [result] = await databaseClient.query<Result>(
+      "update tile SET coord_x = ?, coord_y = ? WHERE id = ?",
+      [tileToUpdate.coord_x, tileToUpdate.coord_y, tileToUpdate.id],
+    );
+
+    // Return how many rows were affected
+    return result.affectedRows;
+  }
+
   async readByCoordinates(coordX: number, coordY: number) {
-    // your code here
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM tile WHERE coord_x = ? AND coord_y = ?",
+      [coordX, coordY],
+    );
+
+    // Si une tuile est trouvée, retourne la première tuile, sinon retourne undefined
+    return rows as Tile[];
   }
 
   async getRandomIsland() {

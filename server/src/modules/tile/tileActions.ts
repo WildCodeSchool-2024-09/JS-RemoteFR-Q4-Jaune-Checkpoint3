@@ -11,7 +11,28 @@ const browse: RequestHandler = async (req, res, next) => {
 };
 
 const validate: RequestHandler = async (req, res, next) => {
-  // your code here
+  if (
+    typeof req.body.coord_x !== "number" ||
+    typeof req.body.coord_y !== "number" ||
+    req.body.coord_x < 0 ||
+    req.body.coord_x > 11 ||
+    req.body.coord_y < 0 ||
+    req.body.coord_y > 5
+  ) {
+    res.sendStatus(422);
+    return;
+  }
+
+  try {
+    const tiles = await tileRepository.readByCoordinates(
+      req.body.coord_x,
+      req.body.coord_y,
+    );
+
+    next();
+  } catch (err) {
+    next(err);
+  }
 };
 
 export default {

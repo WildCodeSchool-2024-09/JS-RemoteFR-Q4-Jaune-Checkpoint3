@@ -96,3 +96,8 @@ VALUES
   ("sea", 9, 5), 
   ("sea", 10, 5), 
   ("island", 11, 5);
+
+ALTER TABLE boat
+ADD COLUMN tile_id INT;
+ALTER TABLE boat
+ADD FOREIGN KEY (tile_id) REFERENCES tile(id);

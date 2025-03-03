@@ -11,18 +11,37 @@ type Tile = {
 };
 
 class TileRepository {
+  async create(tile: Omit<Tile, "id">) {
+    const [result] = await databaseClient.query<Result>(
+      "insert into tile (type, coord_x, coord_y, has_treasure) values (?, ?, ?, ?)",
+      [tile.type, tile.coord_x, tile.coord_y, tile.has_treasure],
+    );
+    return result.insertId;
+  }
+
   async readAll() {
     // Execute the SQL SELECT query to retrieve all tiles from the "tile" table
     const [rows] = await databaseClient.query<Rows>(
       "select * from tile order by coord_y, coord_x",
     );
 
-    // Return the array of tiles
     return rows as Tile[];
   }
 
   async readByCoordinates(coordX: number, coordY: number) {
-    // your code here
+    const [rows] = await databaseClient.query<Rows>(
+      "select * from tile where coord_x = ? and coord_y= ?",
+      [coordX, coordY],
+    );
+    return rows as Tile[];
+  }
+
+  async update(tile: Tile) {
+    const [result] = await databaseClient.query<Result>(
+      "update tile set type = ?, coord_x = ?, coord_y = ?, has_treasure = ? where id = ?",
+      [tile.type, tile.coord_x, tile.coord_y, tile.has_treasure, tile.id],
+    );
+    return result.affectedRows;
   }
 
   async getRandomIsland() {

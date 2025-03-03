@@ -16,10 +16,37 @@ const browse: RequestHandler = async (req, res, next) => {
 };
 
 const validate: RequestHandler = async (req, res, next) => {
-  // your code here
-};
+  try {
+    const { coord_x, coord_y } = req.body;
+    const tile = await tileRepository.readByCoordinates(coord_x, coord_y);
 
+    if (tile.length === 0) {
+      res.sendStatus(422);
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+const edit: RequestHandler = async (req, res, next) => {
+  try {
+    const tile = {
+      coord_x: req.body.coord_x,
+      coord_y: req.body.coord_y,
+    };
+    const affectedRows = await tileRepository.update(tile);
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
 export default {
   browse,
   validate,
+  edit,
 };

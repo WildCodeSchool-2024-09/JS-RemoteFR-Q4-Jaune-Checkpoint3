@@ -17,6 +17,7 @@ router.post("/api/games", gameActions.add);
 
 import tileActions from "./modules/tile/tileActions";
 router.get("/api/tiles", tileActions.browse);
+router.put("/api/boats/:id", tileActions.validate);
 
 /* ************************************************************************* */
 

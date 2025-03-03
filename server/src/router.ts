@@ -7,7 +7,7 @@ const router = express.Router();
 /* ************************************************************************* */
 
 import boatActions from "./modules/boat/boatActions";
-
+router.put("/api/boats/:id", boatActions.edit);
 router.get("/api/boats", boatActions.browse);
 
 import gameActions from "./modules/game/gameActions";

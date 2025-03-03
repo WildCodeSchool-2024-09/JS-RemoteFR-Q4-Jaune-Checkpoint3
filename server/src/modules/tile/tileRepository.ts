@@ -16,7 +16,6 @@ class TileRepository {
     const [rows] = await databaseClient.query<Rows>(
       "select * from tile order by coord_y, coord_x",
     );
-
     // Return the array of tiles
     return rows as Tile[];
   }
